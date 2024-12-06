@@ -62,7 +62,7 @@ This is an example of how to set up your project locally. To get a local copy up
 ### Installation
 
 1. Clone the repository.
-2. We work with Poetry for dependency management. To install the required packages, run:
+2. To install the required packages, run:
    ```bash
    poetry install
    ```

@@ -5,13 +5,13 @@ import os
 import math
 from tqdm import tqdm
 from glomeruli_detection.settings import PROCESSED_DATA_DIR, RAW_DATA_DIR
-from glomeruli_detection.utils.wsi_utils.wsi_utils import load_wsi
+from glomeruli_detection.utils.wsi_utils import load_wsi
 
 
 def initialize_data_dir(image_dir, image_patches_dir, image_masks_dir=None):
     """
     Create the directories to save the patches and masks.
-    
+
     Args:
         image_dir (str): Path to the main directory for image patches and masks.
         image_patches_dir (str): Path to the directory for image patches.
@@ -24,7 +24,9 @@ def initialize_data_dir(image_dir, image_patches_dir, image_masks_dir=None):
         os.makedirs(image_masks_dir, exist_ok=True)
 
 
-def divide_image_masks(image_name, patch_size, level, include_empty=False, output_dir=PROCESSED_DATA_DIR):
+def divide_image_masks(
+    image_name, patch_size, level, include_empty=False, output_dir=PROCESSED_DATA_DIR
+):
     """
     Divide the WSI into patches and generate corresponding masks.
 
@@ -54,7 +56,9 @@ def divide_image_masks(image_name, patch_size, level, include_empty=False, outpu
     level_image_shape = (level_height, level_width)
 
     # Create mask
-    annotations, (min_x, min_y, max_x, max_y) = parse_annotations(image_name, level_downsample)
+    annotations, (min_x, min_y, max_x, max_y) = parse_annotations(
+        image_name, level_downsample
+    )
     mask = create_mask(annotations, level_image_shape)
     assert mask.shape == level_image_shape
 
@@ -84,7 +88,10 @@ def divide_image_masks(image_name, patch_size, level, include_empty=False, outpu
 
                 # Calculate the region to extract
                 region = slide.read_region(
-                    (math.floor(x * level_downsample), math.floor(y * level_downsample)),
+                    (
+                        math.floor(x * level_downsample),
+                        math.floor(y * level_downsample),
+                    ),
                     level,
                     (patch_size, patch_size),
                 )
@@ -162,7 +169,10 @@ def divide_image(image_name, patch_size, level, output_dir=PROCESSED_DATA_DIR):
 
                 # Calculate the region to extract
                 region = slide.read_region(
-                    (math.floor(x * level_downsample), math.floor(y * level_downsample)),
+                    (
+                        math.floor(x * level_downsample),
+                        math.floor(y * level_downsample),
+                    ),
                     level,
                     (patch_size, patch_size),
                 )

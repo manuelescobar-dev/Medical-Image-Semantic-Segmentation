@@ -4,6 +4,26 @@ import cv2
 import numpy as np
 
 
+def plot_image(image, title=None):
+    """
+    Plot an image and its mask side by side using Matplotlib.
+
+    Args:
+        image (PIL.Image or np.ndarray): Image to plot.
+        mask (np.ndarray): Mask to plot.
+        title (str, optional): Title for the plot.
+    """
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+    ax[0].imshow(image)
+    ax[0].set_title("Image")
+    ax[0].axis("off")
+
+    if title:
+        plt.suptitle(title)
+
+    plt.show()
+
+
 def plot_image_mask(image, mask, title=None):
     """
     Plot an image and its mask side by side using Matplotlib.
@@ -24,7 +44,7 @@ def plot_image_mask(image, mask, title=None):
 
     if title:
         plt.suptitle(title)
-    
+
     plt.show()
 
 
@@ -57,7 +77,7 @@ def plot_image_mask_pred(image, mask, pred, title=None):
     plt.show()
 
 
-def plot_wsi_image_and_mask(image_path, max_dim=10000):
+def plot_wsi_image_and_mask(data_dir, image_name, max_dim=10000):
     """
     Assemble and plot the whole slide image (WSI) and its mask from patches.
 
@@ -65,8 +85,8 @@ def plot_wsi_image_and_mask(image_path, max_dim=10000):
         image_path (str): Path to the directory containing image and mask patches.
         max_dim (int, optional): Maximum dimension to limit the size of the full image and mask.
     """
-    patch_dir = os.path.join(image_path, "patches")
-    mask_dir = os.path.join(image_path, "masks")
+    patch_dir = os.path.join(data_dir, "RGB", image_name)
+    mask_dir = os.path.join(data_dir, "MASK", image_name)
 
     # Get all patch files
     patch_files = [f for f in os.listdir(patch_dir) if f.endswith(".png")]
@@ -129,14 +149,19 @@ def plot_wsi_image_and_mask(image_path, max_dim=10000):
 
     plt.show()
 
-if __name__ == "__main__":
-        # Example usage
-    patch_name = "patch_10511_35728"
-    image_name = "RECHERCHE-005"
 
-    from glomeruli_detection.utils.file_utils import load_PIL_image_and_mask
+if __name__ == "__main__":
+    # Example usage
+    image_name = "IMG1"
+    patch_name = "LIT_NOR_VUHSK_127_PAS_VUHSK_20_Aperio_1_1_1"
+
+    from glomeruli_detection.utils.file_utils import load_PIL_image_and_mask, load_image
+    from glomeruli_detection.settings import TRAIN_DATA_DIR
+
     # Load image and mask as PIL Images
-    image, mask = load_PIL_image_and_mask(image_name, patch_name)
-    
+    # image, mask = load_PIL_image_and_mask(TRAIN_DATA_DIR, patch_name)
+    image = load_image(image_name, patch_name)
+
     # Plot the image and mask
-    image, mask = plot_image_mask(image, mask )
+    # image, mask = plot_image_mask(image, mask)
+    image = plot_image(image)
